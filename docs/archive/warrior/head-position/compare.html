@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><title>Warrior 頭部の高さ — 同一条件比較</title>
+<style>body{margin:20px auto;max-width:1040px;background:#e8e2d6;color:#403a33;font:14px system-ui}h1{font-size:22px}label{margin-right:18px}canvas{display:block;background:#f5f1e7;max-width:100%;height:auto;margin-top:12px}button,select,input{font:inherit}p{margin:8px 0}pre{white-space:pre-wrap}</style>
+<h1>頭部の高さ / 修正前 → 修正後</h1>
+<p>各方向の左が修正前、右が修正後。拡大1.8×／通常0.4727×、DPR 1、線の揺らぎOFF。同一位相で比較。</p>
+<label>動作 <select id="action"><option>idle</option><option>walk</option><option>attack</option></select></label>
+<label>位相 <input id="phase" type="range" min="0" max="1000" value="0"><output id="value">0.000</output></label>
+<label>描画 <select id="mode"><option value="live">Live Vector</option><option value="cached">Cached Frames</option></select></label>
+<canvas id="comparison" width="1000" height="660"></canvas><pre id="diagnostics"></pre>
+<button id="check-neck">首の接続を64位相×4方向×3動作で検査</button><details><summary>接続検査の詳細</summary><pre id="neck-results">未実行</pre></details>
+<script type="module">
+import {createCharacterView,createCharacterRegistry} from '../../../../src/index.js';
+import {rigFrame} from '../../../../src/authoring.js';
+import {warrior as before} from '../../../../tests/fixtures/warrior-before.js';
+import {warrior as after} from '../../../../game/characters/warrior.js';
+const canvas=document.querySelector('canvas'),g=canvas.getContext('2d');
+const registry=createCharacterRegistry();registry.register({...before,id:'before'});registry.register({...after,id:'after'});
+const views=[1.8,.4727174500270123].map(scale=>createCharacterView({canvas,registry,width:1000,height:660,dpr:1,scale,lineBoil:false,footFix:true,lineScale:1}));
+function draw(){
+ const action=document.querySelector('#action').value,phase=Number(document.querySelector('#phase').value)/1000,mode=document.querySelector('#mode').value;
+ document.querySelector('#value').textContent=phase.toFixed(3);
+ g.clearRect(0,0,1000,660);g.fillStyle='#f5f1e7';g.fillRect(0,0,1000,660);
+ views.forEach(v=>v.setMode(mode));
+ ['NW','NE','SW','SE'].forEach((direction,i)=>{
+  const x=(i%2)*500,y=Math.floor(i/2)*330;
+  ['before','after'].forEach((character,j)=>{
+   for(const [k,view] of views.entries()) view.render({character,direction,action,actionTime:Math.min(phase,.999999)*after.actions[action].period,
+    originX:x+125+j*250,originY:y+(k?310:240),tile:false,clear:false,projectile:false});
+   g.fillStyle='#403a33';g.font='14px system-ui';g.fillText(`${direction} / ${j?'修正後':'修正前'}`,x+80+j*250,y+21);
+  });
+  g.strokeStyle='#cfc4b3';g.strokeRect(x+.5,y+.5,499,329);
+ });
+ document.querySelector('#diagnostics').textContent=JSON.stringify({action,phase,mode,scale:[1.8,.4727174500270123],dpr:1},null,2);
+}
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',draw));draw();
+document.querySelector('#check-neck').addEventListener('click',async()=>{
+ const button=document.querySelector('#check-neck'),output=document.querySelector('#neck-results');button.disabled=true;
+ const probe=document.createElement('canvas'),scale=2,ox=120,oy=270;
+ const view=createCharacterView({canvas:probe,registry,width:240,height:290,dpr:1,scale,lineBoil:false,footFix:true,lineScale:1});
+ const ctx=probe.getContext('2d'),rows=[];
+ for(const character of ['before','after']) for(const action of ['idle','walk','attack']) for(const direction of ['NW','NE','SW','SE']) {
+  let holes=0,total=0,framesWithHoles=0;
+  for(let frame=0;frame<64;frame++) {
+   ctx.clearRect(0,0,240,290);
+   const info=view.render({character,direction,action,actionTime:frame/64*after.actions[action].period,originX:ox,originY:oy,clear:false,tile:false,projectile:false});
+   const rf=rigFrame(direction,info.pose.body,info.pose.yaw),chest=rf.UY(0,0,46);
+   const a={x:info.head.x,y:info.head.y+19*scale},b={x:ox+chest.x*scale,y:oy+chest.y*scale};
+   const pixels=ctx.getImageData(0,0,240,290).data;let missing=0;
+   // A 12-local-pixel-wide strip between the scarf and upper breastplate.
+   // This measures actual background holes, not the aesthetic quality of the join.
+   for(let i=0;i<=14;i++) for(let offset=-6;offset<=6;offset++) {
+    const u=i/14,x=Math.round(a.x+(b.x-a.x)*u+offset*scale),y=Math.round(a.y+(b.y-a.y)*u);
+    if(pixels[(y*240+x)*4+3]<250)missing++;total++;
+   }
+   holes+=missing;if(missing)framesWithHoles++;
+  }
+  rows.push({character,action,direction,frames:64,framesWithHoles,holes,total});
+  output.textContent=`${character} / ${action} / ${direction}`;
+  await new Promise(resolve=>{const c=new MessageChannel();c.port1.onmessage=()=>{c.port1.close();c.port2.close();resolve();};c.port2.postMessage(0);});
+ }
+ view.dispose();button.disabled=false;
+ output.textContent=JSON.stringify({generatedAt:new Date().toISOString(),method:'alpha >= 250 across a 12px wide neck-to-chest strip; 64 phases per action and direction',rows},null,2);
+});
+</script></html>

@@ -1,0 +1,767 @@
+{
+  "status": "passed",
+  "generatedAt": "2026-10-11T20:57:06.672Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "devicePixelRatio": 1,
+    "measurementDpr": 1
+  },
+  "checks": [
+    {
+      "name": "character registration and required actions",
+      "pass": true
+    },
+    {
+      "name": "equipment declared left sword / right shield",
+      "pass": true,
+      "equipment": {
+        "leftHand": "sword",
+        "rightHand": "shield"
+      }
+    },
+    {
+      "name": "live nonempty NW/idle",
+      "pass": true,
+      "samples": 40,
+      "minimumPixels": 4991
+    },
+    {
+      "name": "live nonempty NE/idle",
+      "pass": true,
+      "samples": 40,
+      "minimumPixels": 5362
+    },
+    {
+      "name": "live nonempty SW/idle",
+      "pass": true,
+      "samples": 40,
+      "minimumPixels": 5512
+    },
+    {
+      "name": "live nonempty SE/idle",
+      "pass": true,
+      "samples": 40,
+      "minimumPixels": 5054
+    },
+    {
+      "name": "live nonempty NW/walk",
+      "pass": true,
+      "samples": 32,
+      "minimumPixels": 4962
+    },
+    {
+      "name": "live nonempty NE/walk",
+      "pass": true,
+      "samples": 32,
+      "minimumPixels": 5335
+    },
+    {
+      "name": "live nonempty SW/walk",
+      "pass": true,
+      "samples": 32,
+      "minimumPixels": 5456
+    },
+    {
+      "name": "live nonempty SE/walk",
+      "pass": true,
+      "samples": 32,
+      "minimumPixels": 4998
+    },
+    {
+      "name": "live nonempty NW/attack",
+      "pass": true,
+      "samples": 48,
+      "minimumPixels": 4367
+    },
+    {
+      "name": "live nonempty NE/attack",
+      "pass": true,
+      "samples": 48,
+      "minimumPixels": 4565
+    },
+    {
+      "name": "live nonempty SW/attack",
+      "pass": true,
+      "samples": 48,
+      "minimumPixels": 4932
+    },
+    {
+      "name": "live nonempty SE/attack",
+      "pass": true,
+      "samples": 48,
+      "minimumPixels": 4625
+    },
+    {
+      "name": "all sampled Live geometry fits cached frameBox",
+      "pass": true,
+      "samples": 480,
+      "clippedSamples": 0
+    },
+    {
+      "name": "arm bones retain their lengths across all sampled poses",
+      "pass": true,
+      "maxBoneDeviation": 0,
+      "stretchedSamples": 0
+    },
+    {
+      "name": "sampled anatomical sword and shield hands retain their sides",
+      "pass": true,
+      "wrongSideSamples": 0
+    },
+    {
+      "name": "cached nonempty NW/idle",
+      "pass": true,
+      "minimumPixels": 4969
+    },
+    {
+      "name": "cached nonempty NE/idle",
+      "pass": true,
+      "minimumPixels": 5361
+    },
+    {
+      "name": "cached nonempty SW/idle",
+      "pass": true,
+      "minimumPixels": 5489
+    },
+    {
+      "name": "cached nonempty SE/idle",
+      "pass": true,
+      "minimumPixels": 5033
+    },
+    {
+      "name": "cached nonempty NW/walk",
+      "pass": true,
+      "minimumPixels": 4942
+    },
+    {
+      "name": "cached nonempty NE/walk",
+      "pass": true,
+      "minimumPixels": 5329
+    },
+    {
+      "name": "cached nonempty SW/walk",
+      "pass": true,
+      "minimumPixels": 5419
+    },
+    {
+      "name": "cached nonempty SE/walk",
+      "pass": true,
+      "minimumPixels": 4979
+    },
+    {
+      "name": "cached nonempty NW/attack",
+      "pass": true,
+      "minimumPixels": 4349
+    },
+    {
+      "name": "cached nonempty NE/attack",
+      "pass": true,
+      "minimumPixels": 4537
+    },
+    {
+      "name": "cached nonempty SW/attack",
+      "pass": true,
+      "minimumPixels": 4921
+    },
+    {
+      "name": "cached nonempty SE/attack",
+      "pass": true,
+      "minimumPixels": 4603
+    },
+    {
+      "name": "cache frame count covers 4 directions × all action keys",
+      "pass": true,
+      "expectedFrames": 240,
+      "generatedFrames": 240
+    },
+    {
+      "name": "cache RGBA accounting matches actual frame dimensions",
+      "pass": true
+    },
+    {
+      "name": "room dimensions are 8 × 8",
+      "pass": true
+    },
+    {
+      "name": "required room objects and architecture",
+      "pass": true,
+      "counts": {
+        "column": 2,
+        "chest": 1,
+        "crate": 1,
+        "barrel": 1
+      }
+    },
+    {
+      "name": "64 tile centers round-trip through camera",
+      "pass": true,
+      "maxRoundtripError": 1.7763568394002505e-15
+    },
+    {
+      "name": "column 1 behind: depth order",
+      "pass": true,
+      "order": [
+        "verification-warrior",
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "column 1 behind: xray candidate detected",
+      "pass": true,
+      "occluded": [
+        "verification-warrior"
+      ]
+    },
+    {
+      "name": "column 1 front: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "verification-warrior",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "column 1 behind: actual pixels are obscured",
+      "pass": true,
+      "unit": {
+        "x": 1.7,
+        "y": 1.7
+      },
+      "order": [
+        "verification-warrior",
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ],
+      "xrayCandidates": [
+        "verification-warrior"
+      ],
+      "visiblePixels": 321,
+      "unobstructedPixels": 2912,
+      "lostPixels": 2591
+    },
+    {
+      "name": "column 1: foreground remains visible",
+      "pass": true,
+      "frontRatio": 0.99,
+      "backRatio": 0.11
+    },
+    {
+      "name": "column 2 behind: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "verification-warrior",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "column 2 behind: xray candidate detected",
+      "pass": true,
+      "occluded": [
+        "verification-warrior"
+      ]
+    },
+    {
+      "name": "column 2 front: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱",
+        "verification-warrior"
+      ]
+    },
+    {
+      "name": "column 2 behind: actual pixels are obscured",
+      "pass": true,
+      "unit": {
+        "x": 4.7,
+        "y": 2.7
+      },
+      "order": [
+        "奥の石柱",
+        "樽",
+        "verification-warrior",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ],
+      "xrayCandidates": [
+        "verification-warrior"
+      ],
+      "visiblePixels": 332,
+      "unobstructedPixels": 2913,
+      "lostPixels": 2581
+    },
+    {
+      "name": "column 2: foreground remains visible",
+      "pass": true,
+      "frontRatio": 0.992,
+      "backRatio": 0.114
+    },
+    {
+      "name": "chest behind: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "verification-warrior",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "chest front: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱",
+        "verification-warrior"
+      ]
+    },
+    {
+      "name": "crate behind: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "verification-warrior",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "crate front: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱",
+        "verification-warrior"
+      ]
+    },
+    {
+      "name": "barrel behind: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "verification-warrior",
+        "樽",
+        "宝箱",
+        "木箱",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "barrel front: depth order",
+      "pass": true,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "verification-warrior",
+        "右の石柱"
+      ]
+    },
+    {
+      "name": "cached scene renders warrior without warnings",
+      "pass": true
+    }
+  ],
+  "character": {
+    "frameBox": {
+      "x0": -86,
+      "x1": 86,
+      "y0": -130,
+      "y1": 29
+    },
+    "liveSamples": 480,
+    "sampledAlphaBounds": {
+      "x0": -60,
+      "x1": 60,
+      "y0": -118,
+      "y1": 16
+    },
+    "clipping": [],
+    "liveRows": [
+      {
+        "direction": "NW",
+        "action": "idle",
+        "samples": 40,
+        "minimumPixels": 4991
+      },
+      {
+        "direction": "NE",
+        "action": "idle",
+        "samples": 40,
+        "minimumPixels": 5362
+      },
+      {
+        "direction": "SW",
+        "action": "idle",
+        "samples": 40,
+        "minimumPixels": 5512
+      },
+      {
+        "direction": "SE",
+        "action": "idle",
+        "samples": 40,
+        "minimumPixels": 5054
+      },
+      {
+        "direction": "NW",
+        "action": "walk",
+        "samples": 32,
+        "minimumPixels": 4962
+      },
+      {
+        "direction": "NE",
+        "action": "walk",
+        "samples": 32,
+        "minimumPixels": 5335
+      },
+      {
+        "direction": "SW",
+        "action": "walk",
+        "samples": 32,
+        "minimumPixels": 5456
+      },
+      {
+        "direction": "SE",
+        "action": "walk",
+        "samples": 32,
+        "minimumPixels": 4998
+      },
+      {
+        "direction": "NW",
+        "action": "attack",
+        "samples": 48,
+        "minimumPixels": 4367
+      },
+      {
+        "direction": "NE",
+        "action": "attack",
+        "samples": 48,
+        "minimumPixels": 4565
+      },
+      {
+        "direction": "SW",
+        "action": "attack",
+        "samples": 48,
+        "minimumPixels": 4932
+      },
+      {
+        "direction": "SE",
+        "action": "attack",
+        "samples": 48,
+        "minimumPixels": 4625
+      }
+    ],
+    "boneReferences": {
+      "L": [
+        11.8,
+        12.3
+      ],
+      "R": [
+        11.799999999999997,
+        12.300000000000002
+      ]
+    },
+    "armLengthErrors": [],
+    "anatomyErrors": [],
+    "cachedSamples": 240,
+    "cacheScale1Dpr1": {
+      "mode": "cached",
+      "scale": 1,
+      "dpr": 1,
+      "caches": {
+        "characters": {
+          "warrior": {
+            "frames": 240,
+            "bytesRGBA": 26254080,
+            "buildMs": 344,
+            "frameW": 172,
+            "frameH": 159,
+            "k": 1
+          }
+        },
+        "totalFrames": 240,
+        "totalBytesRGBA": 26258656
+      },
+      "syncPauses": [
+        {
+          "id": "warrior",
+          "ms": 344,
+          "frames": 240,
+          "at": 18747.29999999702
+        }
+      ]
+    }
+  },
+  "rendering": {
+    "depthRows": [
+      {
+        "column": "奥の石柱",
+        "behind": {
+          "unit": {
+            "x": 1.7,
+            "y": 1.7
+          },
+          "order": [
+            "verification-warrior",
+            "奥の石柱",
+            "樽",
+            "宝箱",
+            "木箱",
+            "右の石柱"
+          ],
+          "xrayCandidates": [
+            "verification-warrior"
+          ],
+          "visiblePixels": 321,
+          "unobstructedPixels": 2912,
+          "lostPixels": 2591
+        },
+        "front": {
+          "unit": {
+            "x": 3.3,
+            "y": 3.3
+          },
+          "order": [
+            "奥の石柱",
+            "verification-warrior",
+            "樽",
+            "宝箱",
+            "木箱",
+            "右の石柱"
+          ],
+          "xrayCandidates": [
+            "verification-warrior"
+          ],
+          "visiblePixels": 2874,
+          "unobstructedPixels": 2902,
+          "lostPixels": 28
+        }
+      },
+      {
+        "column": "右の石柱",
+        "behind": {
+          "unit": {
+            "x": 4.7,
+            "y": 2.7
+          },
+          "order": [
+            "奥の石柱",
+            "樽",
+            "verification-warrior",
+            "宝箱",
+            "木箱",
+            "右の石柱"
+          ],
+          "xrayCandidates": [
+            "verification-warrior"
+          ],
+          "visiblePixels": 332,
+          "unobstructedPixels": 2913,
+          "lostPixels": 2581
+        },
+        "front": {
+          "unit": {
+            "x": 6.3,
+            "y": 4.3
+          },
+          "order": [
+            "奥の石柱",
+            "樽",
+            "宝箱",
+            "木箱",
+            "右の石柱",
+            "verification-warrior"
+          ],
+          "xrayCandidates": [],
+          "visiblePixels": 2868,
+          "unobstructedPixels": 2892,
+          "lostPixels": 24
+        }
+      }
+    ],
+    "propDepthRows": [
+      {
+        "prop": "宝箱",
+        "where": "behind",
+        "order": [
+          "奥の石柱",
+          "verification-warrior",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱"
+        ]
+      },
+      {
+        "prop": "宝箱",
+        "where": "front",
+        "order": [
+          "奥の石柱",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱",
+          "verification-warrior"
+        ]
+      },
+      {
+        "prop": "木箱",
+        "where": "behind",
+        "order": [
+          "奥の石柱",
+          "verification-warrior",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱"
+        ]
+      },
+      {
+        "prop": "木箱",
+        "where": "front",
+        "order": [
+          "奥の石柱",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱",
+          "verification-warrior"
+        ]
+      },
+      {
+        "prop": "樽",
+        "where": "behind",
+        "order": [
+          "奥の石柱",
+          "verification-warrior",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱"
+        ]
+      },
+      {
+        "prop": "樽",
+        "where": "front",
+        "order": [
+          "奥の石柱",
+          "樽",
+          "宝箱",
+          "木箱",
+          "verification-warrior",
+          "右の石柱"
+        ]
+      }
+    ],
+    "rendererCachePreparation": {
+      "warrior": {
+        "frames": 240,
+        "bytesRGBA": 15216960,
+        "buildMs": 351.09999999403954
+      }
+    },
+    "diagnostics": {
+      "mode": "cached",
+      "options": {
+        "mode": "cached",
+        "lineBoil": false,
+        "footFix": true,
+        "xray": false,
+        "characterScale": 1.25,
+        "footOffset": 6
+      },
+      "camera": {
+        "scale": 0.6058501196264566,
+        "tx": 480,
+        "ty": 190.8881685575365,
+        "dpr": 1,
+        "width": 960,
+        "height": 680
+      },
+      "characterFrameScale": 0.7573126495330708,
+      "lastFrame": {
+        "totalMs": 0.4000000059604645,
+        "characterMs": 0.20000000298023224,
+        "order": [
+          "奥の石柱",
+          "樽",
+          "宝箱",
+          "木箱",
+          "右の石柱",
+          "verification-warrior"
+        ],
+        "occluded": [],
+        "warnings": []
+      },
+      "scene": {
+        "buildMs": 34,
+        "bgBytesRGBA": 2611200,
+        "propBytesRGBA": 647652,
+        "props": 5
+      },
+      "caches": {
+        "characters": {
+          "warrior": {
+            "frames": 240,
+            "bytesRGBA": 15216960,
+            "buildMs": 351.09999999403954,
+            "frameW": 131,
+            "frameH": 121,
+            "k": 0.7573126495330708
+          }
+        },
+        "totalFrames": 240,
+        "totalBytesRGBA": 15219680
+      },
+      "syncPauses": [
+        {
+          "id": "warrior",
+          "ms": 351.09999999403954,
+          "frames": 240,
+          "at": 26603.29999999702
+        }
+      ],
+      "memoryNote": "bytesRGBA は幅×高さ×4 の理論値。ブラウザの実メモリ (GPU 側の複製などを含む) とは異なる"
+    }
+  },
+  "limitations": [
+    "Alpha bounds include the common ground shadow; translucent pixels with alpha <= 2 are ignored.",
+    "FrameBox coverage samples cache keys and interval midpoints, not every possible continuous phase.",
+    "RGBA values are width × height × 4 theoretical storage, not browser/GPU memory usage.",
+    "Technical assertions do not determine attractive anatomy, equipment readability, or perceived foot sliding.",
+    "Human subjective evaluation has not been performed."
+  ],
+  "elapsedMs": 10819.6,
+  "passed": 51,
+  "failed": 0
+}

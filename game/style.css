@@ -1,0 +1,18 @@
+/* Shared typography and controls come from studio/style.css. */
+main,.site-header,footer{max-width:1600px}
+button,select,.button{min-height:54px}
+nav [aria-current=page]{font-weight:800;border-bottom:3px solid var(--green);text-decoration:none}
+.dungeon-heading{margin-bottom:28px}.dungeon-heading p{font-size:20px}
+.dungeon-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start}
+.scene-frame{border:2px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);min-width:0}
+.scene-toolbar{padding:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;border-bottom:1px solid var(--line)}
+.scene-toolbar legend{font-size:18px;margin-bottom:10px}.xray-label{display:flex;align-items:center;gap:12px;min-height:54px;cursor:pointer}.xray-label input{width:24px;height:24px;accent-color:var(--green)}
+.dungeon-canvas-wrap{height:clamp(420px,43vw,700px);position:relative;background:#eee9dc}
+#dungeon{display:block;width:100%!important;height:100%!important;cursor:crosshair;touch-action:manipulation}
+#dungeon:focus-visible{outline:4px solid #a04b1d;outline-offset:-4px}
+.scene-footer{border-top:1px solid var(--line);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.scene-footer>div{display:grid;gap:4px}#position{font-size:16px;color:var(--muted)}
+.character-panel{border:2px solid var(--line);border-radius:14px;background:var(--card);padding:24px;min-width:0}.select-label{display:block;font-size:22px;font-weight:700;margin-bottom:12px}#character-select{width:100%;max-width:100%;margin-bottom:24px}.character-panel .button{width:100%}.support-note{font-size:16px;margin:20px 0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.movement h2{font-size:22px}.move-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.move-buttons button{padding:10px 6px;font-size:18px}#attack{width:100%}.switch-note{margin:18px 0 0}
+#app-message{min-height:30px;margin:18px 0;color:var(--red);font-size:18px}#diagnostics{margin-bottom:24px}#diagnostic-output{max-height:none}
+@media(max-width:1100px){.dungeon-layout{grid-template-columns:1fr}.character-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px}.character-panel>.movement{grid-column:2;grid-row:1/7}.character-panel>.switch-note{grid-column:1/-1}.dungeon-canvas-wrap{height:clamp(380px,64vw,640px)}}
+@media(max-width:650px){.character-panel{display:block;padding:20px}.scene-toolbar,.scene-footer{padding:18px}.dungeon-canvas-wrap{height:360px}.scene-toolbar .button-row>button{flex:1 1 auto}.scene-toolbar fieldset{width:100%}.dungeon-heading p{font-size:18px}.scene-footer>button{width:100%}}

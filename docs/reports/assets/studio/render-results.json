@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-10-11T20:54:17.219Z",
+  "characters": [
+    {
+      "id": "swordsman",
+      "live": 320,
+      "cached": 160,
+      "blank": 0,
+      "clipped": [],
+      "directions": [
+        "NW",
+        "NE",
+        "SW",
+        "SE"
+      ],
+      "actions": [
+        "idle",
+        "walk",
+        "attack"
+      ],
+      "cache": {
+        "characters": {
+          "swordsman": {
+            "frames": 160,
+            "bytesRGBA": 13639680,
+            "buildMs": 85.6000000089407,
+            "frameW": 148,
+            "frameH": 144,
+            "k": 1
+          }
+        },
+        "totalFrames": 160,
+        "totalBytesRGBA": 13644256
+      },
+      "released": true
+    },
+    {
+      "id": "archer",
+      "live": 368,
+      "cached": 184,
+      "blank": 0,
+      "clipped": [],
+      "directions": [
+        "NW",
+        "NE",
+        "SW",
+        "SE"
+      ],
+      "actions": [
+        "idle",
+        "walk",
+        "attack"
+      ],
+      "cache": {
+        "characters": {
+          "archer": {
+            "frames": 184,
+            "bytesRGBA": 15685632,
+            "buildMs": 130.40000000596046,
+            "frameW": 148,
+            "frameH": 144,
+            "k": 1
+          }
+        },
+        "totalFrames": 184,
+        "totalBytesRGBA": 15690208
+      },
+      "released": true
+    },
+    {
+      "id": "skeleton",
+      "live": 32,
+      "cached": 16,
+      "blank": 0,
+      "clipped": [],
+      "directions": [],
+      "actions": [
+        "idle"
+      ],
+      "cache": {
+        "characters": {
+          "skeleton": {
+            "frames": 16,
+            "bytesRGBA": 758784,
+            "buildMs": 6.200000002980232,
+            "frameW": 104,
+            "frameH": 114,
+            "k": 1
+          }
+        },
+        "totalFrames": 16,
+        "totalBytesRGBA": 763360
+      },
+      "released": true
+    },
+    {
+      "id": "warrior",
+      "live": 480,
+      "cached": 240,
+      "blank": 0,
+      "clipped": [],
+      "directions": [
+        "NW",
+        "NE",
+        "SW",
+        "SE"
+      ],
+      "actions": [
+        "idle",
+        "walk",
+        "attack"
+      ],
+      "cache": {
+        "characters": {
+          "warrior": {
+            "frames": 240,
+            "bytesRGBA": 26254080,
+            "buildMs": 357.80000001192093,
+            "frameW": 172,
+            "frameH": 159,
+            "k": 1
+          }
+        },
+        "totalFrames": 240,
+        "totalBytesRGBA": 26258656
+      },
+      "released": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

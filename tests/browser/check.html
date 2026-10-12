@@ -1,0 +1,15 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><title>Studio 描画検証</title><style>body{font:18px/1.6 system-ui;margin:30px;background:#f3eee3;color:#282e27}button{font:inherit;padding:16px;min-height:52px}pre{white-space:pre-wrap;font-size:16px}</style><h1>カタログ全体の描画検証</h1><p>Liveのcache keyと中間位相、Cachedの全コマ、キャッシュ解放を既存APIで確認します。</p><button id="run">検証する</button><p id="status">未実行</p><pre id="results"></pre><script type="module">
+import {catalog} from '../../characters/catalog.js';
+import {createCharacterView,frameKeysOf} from '../../src/index.js';
+const yieldTask=()=>new Promise(r=>{const c=new MessageChannel();c.port1.onmessage=()=>{c.port1.close();c.port2.close();r();};c.port2.postMessage(0);});
+document.querySelector('#run').onclick=async()=>{
+ const button=document.querySelector('#run'),status=document.querySelector('#status'),out=document.querySelector('#results');button.disabled=true;const results={generatedAt:new Date().toISOString(),characters:[],errors:[]};
+ try{for(const entry of catalog){const d=entry.definition,b=d.frameBox,w=Math.ceil(b.x1-b.x0)+100,h=Math.ceil(b.y1-b.y0)+100,x=50-b.x0,y=50-b.y0;
+  const canvas=document.createElement('canvas'),view=createCharacterView({canvas,width:w,height:h,dpr:1,scale:1,characters:[d],lineBoil:false,footFix:true,lineScale:1}),g=canvas.getContext('2d');const row={id:d.id,live:0,cached:0,blank:0,clipped:[],directions:entry.directions,actions:entry.actions};
+  for(const mode of ['live','cached']){view.setMode(mode);for(const action of entry.actions){const keys=frameKeysOf(d.actions[action]),phases=mode==='live'?keys.flatMap((k,i)=>[k,(k+(keys[i+1]??1))/2]):keys;
+   for(const direction of(entry.directions.length?entry.directions:['SE']))for(const u of phases){g.clearRect(0,0,w,h);view.render({character:d.id,direction,action,actionTime:u*d.actions[action].period+1e-9,originX:x,originY:y,tile:false,clear:false,projectile:false});const p=g.getImageData(0,0,w,h).data;let count=0,clipped=0;for(let py=0;py<h;py++)for(let px=0;px<w;px++){if(p[(py*w+px)*4+3]<=2)continue;count++;if(px<x+b.x0||px>=x+b.x1||py<y+b.y0||py>=y+b.y1)clipped++;}row[mode]++;if(!count)row.blank++;if(clipped&&mode==='live')row.clipped.push({action,direction,phase:u,pixels:clipped});}
+   status.textContent=`${entry.name} / ${mode} / ${action}`;await yieldTask();
+  }}row.cache=view.getDiagnostics().caches;view.dispose();row.released=view.getDiagnostics().caches.totalFrames===0;results.characters.push(row);
+ }}catch(error){results.errors.push(String(error));}finally{button.disabled=false;results.passed=results.errors.length===0&&results.characters.length===catalog.length&&results.characters.every(c=>!c.blank&&!c.clipped.length&&c.released);out.textContent=JSON.stringify(results,null,2);status.textContent=results.passed?'PASS':'FAIL';}
+};
+</script></html>

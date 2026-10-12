@@ -1,0 +1,15 @@
+{
+  "name": "character-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node tools/start-studio.mjs",
+    "catalog:sync": "node tools/sync-catalog.mjs",
+    "catalog:check": "node tools/sync-catalog.mjs --check",
+    "export:game": "node tools/export-game.mjs",
+    "test": "node --test tests/node/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

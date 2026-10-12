@@ -1,0 +1,222 @@
+{
+  "generatedAt": "2026-10-11T20:13:25.937Z",
+  "method": "alpha >= 250 across a 12px wide neck-to-chest strip; 64 phases per action and direction",
+  "rows": [
+    {
+      "character": "before",
+      "action": "idle",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "idle",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 1816,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "idle",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 2705,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "idle",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 541,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "walk",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "walk",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 1833,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "walk",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 2645,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "walk",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 551,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "attack",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 25,
+      "holes": 205,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "attack",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 1752,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "attack",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 64,
+      "holes": 2447,
+      "total": 12480
+    },
+    {
+      "character": "before",
+      "action": "attack",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 23,
+      "holes": 97,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "idle",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "idle",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "idle",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "idle",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "walk",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "walk",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "walk",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "walk",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "attack",
+      "direction": "NW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "attack",
+      "direction": "NE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "attack",
+      "direction": "SW",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    },
+    {
+      "character": "after",
+      "action": "attack",
+      "direction": "SE",
+      "frames": 64,
+      "framesWithHoles": 0,
+      "holes": 0,
+      "total": 12480
+    }
+  ]
+}

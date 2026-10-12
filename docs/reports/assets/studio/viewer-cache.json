@@ -1,0 +1,85 @@
+{
+  "id": "warrior",
+  "source": "characters/warrior/character.js",
+  "builtin": false,
+  "directions": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "actions": {
+    "idle": {
+      "period": 3.141592653589793,
+      "frames": 20
+    },
+    "walk": {
+      "period": 0.7142857142857143,
+      "frames": 16
+    },
+    "attack": {
+      "period": 1.35,
+      "keys": [
+        0,
+        0.06,
+        0.12,
+        0.2,
+        0.27,
+        0.33,
+        0.38,
+        0.42,
+        0.45,
+        0.47,
+        0.49,
+        0.51,
+        0.53,
+        0.55,
+        0.58,
+        0.62,
+        0.67,
+        0.72,
+        0.77,
+        0.82,
+        0.87,
+        0.92,
+        0.96,
+        0.99
+      ],
+      "once": true
+    }
+  },
+  "frameBox": {
+    "x0": -86,
+    "x1": 86,
+    "y0": -130,
+    "y1": 29
+  },
+  "view": {
+    "mode": "cached",
+    "scale": 2.2,
+    "dpr": 1,
+    "caches": {
+      "characters": {
+        "warrior": {
+          "frames": 240,
+          "bytesRGBA": 127344000,
+          "buildMs": 401.6000000089407,
+          "frameW": 379,
+          "frameH": 350,
+          "k": 2.2
+        }
+      },
+      "totalFrames": 240,
+      "totalBytesRGBA": 127366540
+    },
+    "syncPauses": [
+      {
+        "id": "warrior",
+        "ms": 401.6000000089407,
+        "frames": 240,
+        "at": 8326.60000000894
+      }
+    ]
+  },
+  "sheet": null
+}

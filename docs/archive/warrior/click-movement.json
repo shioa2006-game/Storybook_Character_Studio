@@ -1,0 +1,184 @@
+{
+  "tab": "dungeon",
+  "mode": "cached",
+  "game": {
+    "unit": {
+      "id": "warrior",
+      "character": "warrior",
+      "x": 5.5,
+      "y": 2.5,
+      "direction": "SE",
+      "action": "idle",
+      "actionTime": 0.5168333333333329
+    },
+    "cell": [
+      5,
+      2
+    ],
+    "path": [],
+    "target": null,
+    "status": "待機中",
+    "queuedAttack": false,
+    "totalWalked": 4.000000000000004,
+    "walkTimePerTile": 1.6835875742536843,
+    "speed": 1.5,
+    "attackPeriod": 1.35,
+    "segment": null,
+    "blocked": [
+      [
+        2,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        5
+      ]
+    ]
+  },
+  "preview": {
+    "direction": "SE",
+    "action": "attack",
+    "phase": 0.38,
+    "playing": false,
+    "speed": 1
+  },
+  "renderer": {
+    "mode": "cached",
+    "options": {
+      "mode": "cached",
+      "lineBoil": true,
+      "footFix": true,
+      "xray": false,
+      "characterScale": 1.25,
+      "footOffset": 6
+    },
+    "camera": {
+      "scale": 0.37817396002160986,
+      "tx": 435,
+      "ty": 126.92382495948137,
+      "dpr": 1,
+      "width": 870,
+      "height": 440
+    },
+    "characterFrameScale": 0.4727174500270123,
+    "lastFrame": {
+      "totalMs": 0,
+      "characterMs": 0,
+      "order": [
+        "奥の石柱",
+        "樽",
+        "宝箱",
+        "木箱",
+        "warrior",
+        "右の石柱"
+      ],
+      "occluded": [],
+      "warnings": []
+    },
+    "scene": {
+      "buildMs": 36.6000000089407,
+      "bgBytesRGBA": 1531200,
+      "propBytesRGBA": 254304,
+      "props": 5
+    },
+    "caches": {
+      "characters": {
+        "warrior": {
+          "frames": 240,
+          "bytesRGBA": 5982720,
+          "buildMs": 402.8999999910593,
+          "frameW": 82,
+          "frameH": 76,
+          "k": 0.4727174500270123
+        }
+      },
+      "totalFrames": 240,
+      "totalBytesRGBA": 5983820
+    },
+    "syncPauses": [
+      {
+        "id": "warrior",
+        "ms": 402.8999999910593,
+        "frames": 240,
+        "at": 47982
+      }
+    ],
+    "memoryNote": "bytesRGBA は幅×高さ×4 の理論値。ブラウザの実メモリ (GPU 側の複製などを含む) とは異なる"
+  },
+  "study": {
+    "mode": "cached",
+    "scale": 2.4153846153846152,
+    "dpr": 1,
+    "caches": {
+      "characters": {},
+      "totalFrames": 0,
+      "totalBytesRGBA": 0
+    },
+    "syncPauses": [
+      {
+        "id": "warrior",
+        "ms": 385.90000000596046,
+        "frames": 240,
+        "at": 49630.80000001192
+      }
+    ]
+  },
+  "portrait": {
+    "mode": "cached",
+    "scale": 1.6153846153846154,
+    "dpr": 1,
+    "caches": {
+      "characters": {
+        "warrior": {
+          "frames": 240,
+          "bytesRGBA": 68588160,
+          "buildMs": 399.40000000596046,
+          "frameW": 278,
+          "frameH": 257,
+          "k": 1.6153846153846154
+        }
+      },
+      "totalFrames": 240,
+      "totalBytesRGBA": 68600256
+    },
+    "syncPauses": [
+      {
+        "id": "warrior",
+        "ms": 399.40000000596046,
+        "frames": 240,
+        "at": 78228.30000001192
+      }
+    ]
+  },
+  "actual": {
+    "mode": "cached",
+    "scale": 0.4727174500270123,
+    "dpr": 1,
+    "caches": {
+      "characters": {},
+      "totalFrames": 0,
+      "totalBytesRGBA": 0
+    },
+    "syncPauses": [
+      {
+        "id": "warrior",
+        "ms": 365.20000000298023,
+        "frames": 240,
+        "at": 49996.40000000596
+      }
+    ]
+  },
+  "errors": []
+}

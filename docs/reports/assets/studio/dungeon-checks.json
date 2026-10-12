@@ -1,0 +1,110 @@
+{
+  "modes": [
+    {
+      "selected": "swordsman",
+      "mode": "live",
+      "character": "swordsman",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [],
+      "frames": 0,
+      "errors": []
+    },
+    {
+      "selected": "swordsman",
+      "mode": "cached",
+      "character": "swordsman",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [
+        "swordsman"
+      ],
+      "frames": 160,
+      "errors": []
+    },
+    {
+      "selected": "archer",
+      "mode": "live",
+      "character": "archer",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [],
+      "frames": 0,
+      "errors": []
+    },
+    {
+      "selected": "archer",
+      "mode": "cached",
+      "character": "archer",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [
+        "archer"
+      ],
+      "frames": 184,
+      "errors": []
+    },
+    {
+      "selected": "skeleton",
+      "mode": "live",
+      "character": "skeleton",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [],
+      "frames": 0,
+      "errors": []
+    },
+    {
+      "selected": "skeleton",
+      "mode": "cached",
+      "character": "skeleton",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [
+        "skeleton"
+      ],
+      "frames": 16,
+      "errors": []
+    },
+    {
+      "selected": "warrior",
+      "mode": "live",
+      "character": "warrior",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [],
+      "frames": 0,
+      "errors": []
+    },
+    {
+      "selected": "warrior",
+      "mode": "cached",
+      "character": "warrior",
+      "action": "idle",
+      "warnings": [],
+      "cachedCharacters": [
+        "warrior"
+      ],
+      "frames": 240,
+      "errors": []
+    }
+  ],
+  "reflow": [
+    {
+      "condition": "狭幅 360px",
+      "clientWidth": 345,
+      "scrollWidth": 345,
+      "bodyFont": "18px",
+      "minButtonHeight": 54,
+      "horizontalOverflow": []
+    },
+    {
+      "condition": "200%相当",
+      "clientWidth": 617,
+      "scrollWidth": 617,
+      "bodyFont": "18px",
+      "minButtonHeight": 54,
+      "horizontalOverflow": []
+    }
+  ]
+}

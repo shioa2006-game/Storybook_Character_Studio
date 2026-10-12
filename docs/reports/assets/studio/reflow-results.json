@@ -1,0 +1,70 @@
+[
+  {
+    "condition": "200%相当",
+    "clientWidth": 617,
+    "scrollWidth": 617,
+    "bodyFont": "18px",
+    "minButtonHeight": 53.6875,
+    "horizontalOverflow": []
+  },
+  {
+    "condition": "125%相当",
+    "clientWidth": 997,
+    "scrollWidth": 997,
+    "bodyFont": "18px",
+    "minButtonHeight": 53.6875,
+    "horizontalOverflow": []
+  },
+  {
+    "condition": "150%相当",
+    "clientWidth": 828,
+    "scrollWidth": 828,
+    "bodyFont": "18px",
+    "minButtonHeight": 53.6875,
+    "horizontalOverflow": []
+  },
+  {
+    "condition": "狭幅 360px",
+    "clientWidth": 345,
+    "scrollWidth": 345,
+    "bodyFont": "18px",
+    "minButtonHeight": 53.6875,
+    "horizontalOverflow": []
+  },
+  {
+    "condition": "狭幅 360px",
+    "clientWidth": 345,
+    "scrollWidth": 345,
+    "bodyFont": "18px",
+    "minButtonHeight": 53.6875,
+    "horizontalOverflow": [],
+    "page": "gallery"
+  },
+  {
+    "condition": "200%相当",
+    "clientWidth": 617,
+    "scrollWidth": 617,
+    "bodyFont": "18px",
+    "minButtonHeight": null,
+    "horizontalOverflow": [],
+    "page": "gallery"
+  },
+  {
+    "condition": "150%相当",
+    "clientWidth": 828,
+    "scrollWidth": 828,
+    "bodyFont": "18px",
+    "minButtonHeight": null,
+    "horizontalOverflow": [],
+    "page": "gallery"
+  },
+  {
+    "condition": "125%相当",
+    "clientWidth": 997,
+    "scrollWidth": 997,
+    "bodyFont": "18px",
+    "minButtonHeight": null,
+    "horizontalOverflow": [],
+    "page": "gallery"
+  }
+]

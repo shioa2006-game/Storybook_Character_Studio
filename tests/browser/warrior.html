@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inkstone Warrior — 技術検証</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #312b25; background: #eee8dc; }
+    body { max-width: 1160px; margin: auto; padding: 24px; }
+    a { color: #784536; } h1 { font-size: 25px; margin-bottom: 8px; }
+    p { line-height: 1.7; } button { padding: 10px 24px; border: 1px solid #684c3d; border-radius: 5px; background: #754533; color: white; font: inherit; cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; } #status { margin-left: 14px; }
+    pre { background: #fbf8f1; padding: 18px; max-height: 560px; overflow: auto; border: 1px solid #c4b8a3; line-height: 1.5; font-size: 12px; }
+    .gallery { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; }
+    .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    figure { margin: 0; border: 1px solid #c4b8a3; background: #fbf8f1; padding: 10px; }
+    figcaption { font-size: 13px; margin-bottom: 8px; } canvas { max-width: 100%; height: auto; display: block; margin: auto; }
+    details { margin-top: 22px; } summary { cursor: pointer; font-weight: 600; margin-bottom: 14px; }
+    .note { font-size: 13px; color: #685d50; }
+    @media (max-width: 700px) { body { padding: 14px; } .gallery { grid-template-columns: repeat(2, 1fr); } .scenes { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <a href="../../game/index.html">← 操作デモへ戻る</a>
+  <h1>Warrior / 実ブラウザ技術検証</h1>
+  <p>公開APIによる全方向・全動作の描画、キャッシュ範囲、生成時間、RGBA理論容量、実際の部屋の前後関係と遮蔽を確認します。</p>
+  <p class="note">技術的な成功は、美術品質や動作の自然さの合格判定を意味しません。人物の主観評価は別途必要です。キャッシュ測定は DPR 1 固定です。</p>
+  <button id="run" type="button">検証を実行</button><span id="status" role="status">未実行</span>
+  <p><a id="download-results" hidden download="browser-results.json">検証結果JSONを保存</a></p>
+  <pre id="results" aria-live="polite">{"status":"not-run"}</pre>
+  <details open><summary>Live Vector / 4方向 × 3動作</summary><div id="live-gallery" class="gallery"></div></details>
+  <details><summary>Cached Frames / 4方向 × 3動作</summary><div id="cached-gallery" class="gallery"></div></details>
+  <details open><summary>石柱の後ろ・手前 / 実際のピクセル遮蔽</summary><div id="scene-gallery" class="scenes"></div></details>
+  <script type="module" src="./warrior-checks.js"></script>
+</body>
+</html>
