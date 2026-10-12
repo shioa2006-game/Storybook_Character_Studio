@@ -13,3 +13,4 @@ document.querySelector('#run').onclick=async()=>{
  }}catch(error){results.errors.push(String(error));}finally{button.disabled=false;results.passed=results.errors.length===0&&results.characters.length===catalog.length&&results.characters.every(c=>!c.blank&&!c.clipped.length&&c.released);out.textContent=JSON.stringify(results,null,2);status.textContent=results.passed?'PASS':'FAIL';}
 };
 </script></html>
+<script type="module" src="./skeleton-checks.js"></script>

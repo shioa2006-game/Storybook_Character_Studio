@@ -1,0 +1,64 @@
+{
+  "url": "http://127.0.0.1:8091/",
+  "workingDirectory": "C:/Users/shioa/AppData/Local/Temp/inkstone-skeleton-refinement-20261012",
+  "cases": [
+    {
+      "mode": "live",
+      "direction": "NW",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-live-NW.jpg"
+    },
+    {
+      "mode": "live",
+      "direction": "NE",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-live-NE.jpg"
+    },
+    {
+      "mode": "live",
+      "direction": "SW",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-live-SW.jpg"
+    },
+    {
+      "mode": "live",
+      "direction": "SE",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-live-SE.jpg"
+    },
+    {
+      "mode": "cached",
+      "direction": "NW",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-cached-NW.jpg"
+    },
+    {
+      "mode": "cached",
+      "direction": "NE",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-cached-NE.jpg"
+    },
+    {
+      "mode": "cached",
+      "direction": "SW",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-cached-SW.jpg"
+    },
+    {
+      "mode": "cached",
+      "direction": "SE",
+      "action": "idle",
+      "warnings": 0,
+      "screenshot": "export-cached-SE.jpg"
+    }
+  ],
+  "console": [],
+  "reloadedAfterStartingInExportDirectory": true
+}

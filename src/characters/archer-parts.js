@@ -2,131 +2,122 @@
  * Inkstone — 弓使い — 造形の部品: 頭 (房の髪・顔)・胴 (革の胴着)・ケープ・矢筒・弓・線の補助
  */
 import { DRAW } from '../core/settings.js';
-import { TAU, V, ellipsePts, lerp } from '../core/geometry.js';
+import { TAU, ellipsePts, lerp } from '../core/geometry.js';
 import { PAL } from '../core/palette.js';
-import { clipPath, fillPath, inkLine, inkShape, roughen, strokePath } from '../core/ink.js';
-import { LW, lightOf, paint, paintA, shadeOf, taperPts } from '../core/paint.js';
+import { inkLine, inkShape, roughen, strokePath } from '../core/ink.js';
+import { LW, lightOf, paint, paintA, taperPts } from '../core/paint.js';
 import { cLine } from './rig.js';
-import { ARC } from './archer-pose.js';
+import { ARC, QUIVER_TOP } from './archer-pose.js';
 
-export const ARCHER_LEGS = { pants: '#5f6450', boot: '#8a5e3c', cuff: '#b48a5c', bootH: 0.5 };   // [E修正5] ズボンをくすんだ緑灰にしてブーツと分ける
+export const ARCHER_LEGS = { pants: ARC.pants, boot: ARC.boot, cuff: ARC.bootCuff, bootH: .5, legR0:4.5, legR1:3.6, footR:4.2, soleR:3.8 };
 
-// [E修正4] 髪の作り方を変更: 房を1本ずつ輪郭付きで重ねた初版は、背面が「松かさ」、正面の前髪が「顔の前の格子」に見えた。
-//   起点画像の髪と同じく「1つの塊 + ぎざぎざの縁 (房の先) + 切れ込みから伸びる細い筋 + 明るい帯」で描く。
+// Head shell: 46 × .96 = 44px high, matching the studio humanoid guide.
 export const AH = {
-  // 正面系 (sx=+1 = 画面右向き)。顔の楕円 17 × 16.5。前髪の先は眉 (y≈-2) にかからない高さ (y≤-4.4) で止める
-  backF: [[-3, -20], [-13, -18], [-19, -9], [-20.5, 2], [-17.5, 9], [-12.5, 4]],
-  napeF: [[-19.5, 0], [-24, 8.5], [-17.5, 5], [-18.5, 13], [-13, 6]],
-  earF: [[-15, -1], [-20, 0], [-20.5, 5], [-17.5, 8], [-15, 6]],
-  capF: [[17.6, -3.6], [18.2, -10], [15.5, -16], [10, -20.5], [3, -23], [-5, -23], [-11.5, -20.5],
-    [-17.5, -20], [-16.5, -16], [-22, -12.5], [-18.6, -8.5], [-21.5, -3], [-17.5, -1.8], [-14.5, -5], [-11, -9],
-    [-6.5, -4.8], [-3, -9], [2, -4.4], [5, -9], [10, -5], [12.5, -8.5], [16.6, -1.2]],
-  capLinesF: [[[-3, -9], [-1, -17]], [[5, -9], [6.5, -16.5]], [[12.5, -8.5], [13.2, -14]], [[-16.5, -16], [-11, -19.5]], [[-18.6, -8.5], [-13.5, -13]], [[-1, -21.5], [-9, -13.5]]],
-  lightF: [[-7, -20.5], [2, -21.5], [10, -18.5], [13, -14.5], [8, -16], [1, -18], [-6, -17.5]],
-  ahoge: [[-1, -23], [0, -29.5], [4.8, -30.5], [2.6, -27.5], [1.6, -23]],
-  // 背面系: 肌色の頭の上に髪の塊。襟足と横はぎざぎざ、顔の向く側の下に頬が少し覗く
-  earBL: [[-15, -1], [-20, 0], [-20.5, 5], [-17.5, 8], [-15, 6]], earBR: [[15, -1], [20, 0], [20.5, 5], [17.5, 8], [15, 6]],
-  // [E修正9] 横に房のはねを足す (滑らかな半球だと背面が「兜」に見えた)
-  hairB: [[16.8, -4], [16.4, -9.5], [19, -12.5], [15, -14.5], [11.5, -19.5], [4, -23.5], [-4, -23.5], [-11.5, -19.5], [-15, -14.5], [-19, -12.5], [-16.4, -9.5], [-17.6, -4],
-    [-20.5, 1.5], [-16.5, 3], [-14.5, 11], [-11, 7.5], [-7, 14.5], [-3.5, 9.5], [0.5, 15.5], [3.5, 9.5], [7.5, 14], [10, 8], [12.5, 10.5], [13.5, 3], [15.5, -1]],
-  linesB: [[[-16.5, 3], [-12.5, -5]], [[-11, 7.5], [-7.5, -2]], [[-3.5, 9.5], [-1.5, 0]], [[3.5, 9.5], [3.5, 0]], [[10, 8], [8.5, -1]], [[-8, -17], [-14.5, -7]], [[8, -17.5], [13.5, -8]]],
-  lightB: [[-10, -18], [-3, -21.5], [5, -21.5], [11, -18], [6, -16.5], [-1, -17.5], [-7, -16]],
+  hoodF: [[-23,15],[-27,4],[-25,-9],[-31,-13],[-25,-23],[-11,-27],[5,-25],[19,-20],[23,-13],[20,3],[17,15],[0,19]],
+  hoodB: [[-23,14],[-26,4],[-25,-10],[-30,-14],[-24,-23],[-11,-27],[5,-25],[19,-20],[24,-10],[23,7],[17,16],[0,19],[-15,17]],
+  fringe: [[-20,1],[-18,-10],[-9,-18],[4,-21],[16,-15],[19,-7],[26,-3],[19,-3],[21,4],[15,0],[14,-8],[9,-1],[5,5],[6,-9],[-1,0],[-8,6],[-6,-5],[-15,5],[-14,-1]],
 };
-
-export function drawArcherHead(ctx, c, sx, front, P) {
-  const M = (arr, dx = 0) => arr.map(([x, y]) => [c.x + (x + dx) * sx, c.y + y]);
-  const glow = arr => { ctx.save(); ctx.globalAlpha = 0.7; fillPath(ctx, roughen(V(M(arr)), true, 0.3, 5), ARC.hairLight); ctx.restore(); };
-  if (front) {
-    paintA(ctx, M(AH.backF), { fill: ARC.hairDark, w: LW.outline, depth: 2, speck: 0.6 });
-    paintA(ctx, M(AH.napeF), { fill: ARC.hairDark, w: LW.part, depth: 1.5, speck: 0 });
-    paintA(ctx, M(AH.earF), { fill: ARC.skin, w: LW.part, depth: 1.6, speck: 0 });
-    cLine(ctx, M([[-16.5, 1.5], [-18.8, 3.4], [-17.2, 5.6]]), LW.fine);                             // 人の耳 (剣士のとがった耳と区別)
-    const face = inkShape(ctx, ellipsePts(c.x, c.y, 17, 16.5, 24), { fill: ARC.skin, w: LW.outline * DRAW.lw, amp: 0.4, step: 6 });
-    ctx.save(); clipPath(ctx, face);                                                                 // 前髪の影が額に落ちる
-    ctx.globalAlpha = 0.4; fillPath(ctx, V(M([[-20, -18], [22, -18], [22, -1], [12, -3.5], [3, -2.8], [-7, -3.5], [-20, -1]])), shadeOf(ARC.skin, 0.22)); ctx.globalAlpha = 1;
-    ctx.restore();
-    paintA(ctx, M(AH.ahoge), { fill: ARC.hair, w: LW.detail, depth: 0, speck: 0, amp: 0.15 });
-    paintA(ctx, M(AH.capF), { fill: ARC.hair, w: LW.outline, depth: 3, speck: 0.7 });
-    glow(AH.lightF);
-    for (const s of AH.capLinesF) cLine(ctx, M(s), LW.fine);
-    // 顔: 楕円の目・まっすぐな短い眉・片側だけ上がる小さな口・そばかす2つずつ
-    const ry = P.focus ? 1.6 : 2.75;
-    for (const [ex, rx, back] of [[5, 1.85, true], [12.8, 1.6, false]]) {
-      const [x, y] = M([[ex + P.look, 3.9]])[0];
-      if (P.blink || (P.focus && back)) { cLine(ctx, [[x - 2.2, y + 0.3], [x + 2.2, y - 0.2]], 1.4); continue; }
-      ctx.fillStyle = PAL.ink; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, TAU); ctx.fill();
+const elfShape=(ctx,pts,fill,o={})=>paintA(ctx,pts,{fill,w:1.5,depth:1.5,
+  speck:.55,speckScale:.32,amp:.25,step:4,...o});
+export function drawArcherHead(ctx,c,sx,front,P) {
+  ctx.save();ctx.translate(c.x,c.y);ctx.scale(sx*.96,.96);
+  const line=(pts,w=.65)=>cLine(ctx,pts,w);
+  const ear=side=>{
+    elfShape(ctx,[[-17*side,-1],[-32*side,-3],[-26*side,4],[-18*side,9]],ARC.skin,{w:1.3,depth:.8,speck:0});
+    line([[-20*side,2],[-27*side,0],[-23*side,4]],.65);
+  };
+  if(front) {
+    elfShape(ctx,AH.hoodF,ARC.cape,{w:2.1,depth:2.1,speck:1.1});
+    elfShape(ctx,[[-21,9],[-20,-5],[-10,-19],[5,-21],[20,-12],[20,12],[10,21],[-10,20]],ARC.capeDark,{w:1,depth:0});
+    ear(-1);
+    elfShape(ctx,[[-17,-5],[-13,-15],[2,-18],[15,-11],[19,1],[18,11],[11,17],[1,19],[-11,15],[-16,8]],ARC.skin,{w:1.7,depth:1,speck:0});
+    ear(1);
+    elfShape(ctx,[[-17,-5],[-12,1],[-15,11],[-15,23],[-11,28],[-20,23],[-22,15],[-20,6]],ARC.hair,{depth:1});
+    elfShape(ctx,[[17,-3],[20,5],[20,16],[16,25],[12,27],[15,17],[13,8]],ARC.hair,{depth:1});
+    elfShape(ctx,AH.fringe,ARC.hair,{w:1.4,depth:1.4,speck:.25});
+    for(const pts of [[[1,-18],[-4,-9],[-14,-1]],[[7,-17],[9,-9],[6,-1]],[[13,-13],[17,-4]],[[-18,10],[-18,20]],[[17,10],[17,18]]])line(pts,.6);
+    inkLine(ctx,[{x:-12,y:-9},{x:-5,y:-15},{x:1,y:-18}],{color:ARC.hairLight,w:1.4,amp:.2});
+    for(const [ex,rx] of [[1,1.7],[13,1.5]]) {
+      const x=ex+P.look*.5,y=5;
+      if(P.blink||(P.focus&&ex===1))line([[x-1.8,y],[x+1.8,y-.3]],1);
+      else {ctx.fillStyle=PAL.ink;ctx.beginPath();ctx.ellipse(x,y,rx,P.focus?2.6:4.1,0,0,TAU);ctx.fill();}
     }
-    const bl = P.focus ? 0.9 : 0;
-    cLine(ctx, M([[2.6, -1.4 + bl], [7, -2 + bl * 1.4]]), 1.3); cLine(ctx, M([[10.6, -2.1 + bl * 1.4], [14.4, -1.6 + bl]]), 1.3);
-    ctx.fillStyle = shadeOf(ARC.skin, 0.38);
-    for (const [fx, fy] of [[3, 7.6], [5.2, 8.4], [13.4, 8], [15.3, 7.3]]) { const [x, y] = M([[fx, fy]])[0]; ctx.beginPath(); ctx.arc(x, y, 0.65, 0, TAU); ctx.fill(); }
-    if (P.mouth) { const [x, y] = M([[9.6, 10.6]])[0]; inkShape(ctx, ellipsePts(x, y, 1.9, 1.7, 12), { fill: '#7a3b2e', w: 0.9 * DRAW.lw, amp: 0.1, step: 4 }); }
-    else if (P.focus) cLine(ctx, M([[8, 10.6], [11.3, 10.4]]), 1.05);
-    else cLine(ctx, M([[8.2, 10.4], [10, 10.8], [11.6, 9.8]]), 1.05);
+    line([[-1,-1],[3,-2]],.7);line([[11,-2],[15,-1]],.7);
+    for(const x of [-8,-6,15])inkLine(ctx,[{x,y:10},{x:x+.6,y:11}],{color:'#c69b76',w:.6,amp:.1});
+    if(P.mouth)elfShape(ctx,[[6,13],[9,13],[8,15],[6,14]],'#80553e',{w:.6,depth:0,speck:0});
+    else line([[6,14],[8,13.8]],.55);
+    // Folded hood edge frames the hair; the pointed ear remains outside it.
+    elfShape(ctx,[[-24,7],[-20,-6],[-9,-18],[5,-24],[19,-19],[22,-14],[17,-16],[5,-20],[-7,-13],[-17,-2],[-20,13]],ARC.cape,{w:1.3,depth:.9,speck:.6});
+    line([[-25,-13],[-21,-21],[-12,-24]],.7);
   } else {
-    paintA(ctx, M(AH.earBL), { fill: ARC.skin, w: LW.part, depth: 1.4, speck: 0 }); paintA(ctx, M(AH.earBR), { fill: ARC.skin, w: LW.part, depth: 1.4, speck: 0 });
-    inkShape(ctx, ellipsePts(c.x, c.y, 17, 16.5, 24), { fill: shadeOf(ARC.skin, 0.08), w: LW.outline * DRAW.lw, amp: 0.4, step: 6 });
-    paintA(ctx, M(AH.ahoge), { fill: ARC.hair, w: LW.detail, depth: 0, speck: 0, amp: 0.15 });
-    paintA(ctx, M(AH.hairB), { fill: ARC.hair, w: LW.outline, depth: 3.2, speck: 0.7 });
-    glow(AH.lightB);
-    for (const s of AH.linesB) cLine(ctx, M(s), LW.fine);
-    for (const s of [[[1, -15], [-5.5, -19.5]], [[1, -15], [7.5, -19]], [[1, -15], [0.5, -9]]]) cLine(ctx, M(s), LW.fine);   // つむじからの分け目
+    ear(-1);ear(1);
+    elfShape(ctx,[[-20,4],[-21,17],[-16,25],[-12,21],[-8,26],[-5,21],[1,25],[6,21],[12,25],[17,20],[20,7]],ARC.hair,{w:1.4,depth:1.2,speck:.3});
+    elfShape(ctx,AH.hoodB,ARC.cape,{w:2.1,depth:2.2,speck:1.1});
+    line([[-8,-23],[-3,-15],[0,-2],[-3,14]],.75);
+    line([[-21,-14],[-20,-4],[-14,9]],.65);line([[17,-15],[20,-5],[17,7]],.65);
+    line([[-14,13],[-2,16],[12,14]],.75);
+    line([[-17,18],[-15,22]],.55);line([[13,19],[12,22]],.55);
+  }
+  ctx.restore();
+}
+/** Cream tunic, split leather jerkin, broad belt and one hip pouch. */
+export function drawArcherTorso(ctx,rf,P) {
+  const Q=(arr,a=0)=>arr.map(([b,z])=>rf.UY(a,b,z));
+  paint(ctx,Q([[-13,47],[13,47],[15,30],[18,16],[5,14],[0,16],[-7,14],[-18,16],[-15,30]]),
+    {fill:ARC.linen,w:1.7,depth:1.8,speck:.6,speckScale:.32,amp:.25});
+  for(const side of [-1,1]) {
+    paint(ctx,Q([[side*2,48],[side*13,47],[side*15,33],[side*18,20],[side*5,18],[side*2,29]],1),
+      {fill:ARC.leather,w:1.4,depth:1.8,speck:.8,speckScale:.3,amp:.25});
+    dashedStroke(ctx,Q([[side*11,44],[side*12,33],[side*15,22]],2),.6,[1.3,2]);
+  }
+  if(rf.front) {
+    for(const z of [42,36]) {
+      const b=rf.UY(2,0,z);
+      paint(ctx,ellipsePts(b.x,b.y,1,1,10),{fill:ARC.brass,w:.6,depth:0,speck:0});
+    }
+    paint(ctx,Q([[-11,49],[-7,50],[14,31],[11,28]],3),{fill:ARC.leatherDark,w:1,depth:.7,speck:.2});
+    const b=rf.UY(4,0,40);
+    elfShape(ctx,[[b.x,b.y-2.5],[b.x+2.5,b.y],[b.x,b.y+2.5],[b.x-2.5,b.y]],ARC.brass,{w:.8,depth:0,speck:0});
+  }
+  paint(ctx,Q([[-17,31],[17,31],[17,26],[-17,26]],4),{fill:ARC.leatherDark,w:1.4,depth:1,speck:.3});
+  if(rf.front) {
+    const b=rf.UY(5,0,28.5);
+    elfShape(ctx,[[b.x-3,b.y-2.6],[b.x+3,b.y-2.6],[b.x+3,b.y+2.6],[b.x-3,b.y+2.6]],ARC.brass,{w:1,depth:.4,speck:0});
+    elfShape(ctx,[[b.x-1.8,b.y-1.4],[b.x+1.8,b.y-1.4],[b.x+1.8,b.y+1.4],[b.x-1.8,b.y+1.4]],ARC.leatherDark,{w:.5,depth:0,speck:0});
+  }
+  paint(ctx,Q([[-8,29],[-17,29],[-18,20],[-9,19]],5),{fill:ARC.leather,w:1.2,depth:1,speck:.3,round:1});
+  pLine(ctx,Q([[-9,26],[-13,24],[-17,26]],6),.65);
+}
+/** Long ragged cloak, behind the front body and over the back. */
+export function drawArcherCape(ctx,rf,P) {
+  const Q=arr=>arr.map(([b,z])=>{
+    const k=Math.max(0,(48-z)/36);
+    return rf.UY(-7,b+P.capeSway*k,z-Math.abs(P.capeSway)*.1*k);
+  });
+  paint(ctx,Q([[-12,52],[-21,39],[-30,13],[-26,7],[-22,11],[-18,9],[-13,12],[-7,9],
+    [0,12],[8,9],[14,12],[20,9],[24,12],[28,8],[30,15],[21,39],[12,52]]),
+    {fill:rf.front?ARC.capeDark:ARC.cape,w:1.8,depth:2,speck:.8,speckScale:.32,amp:.3});
+  for(const b of [-17,-7,10,20])pLine(ctx,Q([[b*.6,43],[b,17]]),.65);
+}
+/** Shoulder folds share the rear cloak's centre; a round clasp sits in front. */
+export function drawArcherMantle(ctx,rf) {
+  const a=rf.front?3:-7,Q=arr=>arr.map(([b,z])=>rf.UY(a,b,z));
+  paint(ctx,Q([[-12,53],[-21,48],[-26,38],[-17,40],[0,46],[17,40],[26,38],[21,48],[12,53],[0,50]]),
+    {fill:ARC.cape,w:1.7,depth:1.5,speck:.65,speckScale:.32,amp:.25});
+  pLine(ctx,Q([[-22,41],[-9,46],[0,48],[10,45],[22,41]]),.7);
+  if(rf.front) {
+    const c=rf.UY(4,0,48);
+    paint(ctx,ellipsePts(c.x,c.y,3,3,18),{fill:ARC.brass,w:1.1,depth:.6,speck:0});
+    paint(ctx,ellipsePts(c.x,c.y,1.7,1.7,14),{fill:ARC.brass,w:.6,depth:0,speck:0});
   }
 }
-
-/** 胴: 生成りのチュニック・革の胴着 (前の留め具2つ / 背中の縫い目)・草摺・ベルトとポーチ・矢筒のベルト */
-export function drawArcherTorso(ctx, rf, P) {
-  const { UY, front } = rf, Q = arr => arr.map(([b, z]) => UY(0, b, z));
-  paint(ctx, Q([[16, 27], [-16, 27], [-19, 16], [-12, 13.5], [-5, 16], [2, 13.5], [9, 16], [16, 13.5], [19, 16]]), { fill: ARC.linen, w: LW.outline, depth: 3, speck: 1.1 });
-  paint(ctx, Q([[13.5, 47], [-13.5, 47], [-15, 34], [-16.5, 25], [16.5, 25], [15, 34]]), { fill: ARC.leather, w: LW.outline, depth: 3.6, light: 0.22, speck: 1.4 });
-  dashedStroke(ctx, Q([[11.5, 45], [13, 34], [14.5, 27]])); dashedStroke(ctx, Q([[-11.5, 45], [-13, 34], [-14.5, 27]]));
-  if (front) {
-    pLine(ctx, Q([[1.5, 46], [1.5, 28]]), LW.detail);
-    for (const z of [41, 34]) {                                                                   // 前の留め具 (革帯 + 真鍮の金具)
-      paint(ctx, Q([[-3.5, z + 1.3], [6.5, z + 1.3], [6.5, z - 1.3], [-3.5, z - 1.3]]), { fill: ARC.leatherDark, w: LW.detail, depth: 0.8, speck: 0 });
-      const bk = UY(0.5, 1.5, z);
-      paintA(ctx, [[bk.x - 2, bk.y - 2], [bk.x + 2, bk.y - 2], [bk.x + 2, bk.y + 2], [bk.x - 2, bk.y + 2]], { fill: ARC.brass, w: LW.detail, depth: 0.6, speck: 0, light: 0.4 });
-    }
-  } else pLine(ctx, Q([[0, 46], [0.5, 36], [0, 28]]), LW.detail);
-  paint(ctx, Q([[16.8, 28.5], [-16.8, 28.5], [-17, 24], [17, 24]]), { fill: ARC.leatherDark, w: LW.part, depth: 1.2, speck: 0.5 });
-  if (front) { const bk = UY(2, 6, 26.2); paintA(ctx, [[bk.x - 2.4, bk.y - 2.8], [bk.x + 2.4, bk.y - 2.8], [bk.x + 2.4, bk.y + 2.8], [bk.x - 2.4, bk.y + 2.8]], { fill: ARC.brass, w: LW.detail, depth: 0.8, speck: 0, light: 0.4 }); }
-  for (const b0 of front ? [11, -3] : [4]) paint(ctx, Q([[b0, 24], [b0 - 6.5, 24], [b0 - 6, 17], [b0 - 3.2, 15.8], [b0 - 0.5, 17]]), { fill: ARC.leather, w: LW.detail, depth: 1.4, speck: 0.6 });   // 草摺
-  paint(ctx, Q([[-8.5, 27], [-15, 27], [-15.5, 19.5], [-8.5, 19.5]]), { fill: ARC.leather, w: LW.detail, depth: 1.4, speck: 0, round: 1 });   // ポーチ
-  pLine(ctx, Q([[-8.5, 24.5], [-12, 23], [-15, 24.5]]), LW.fine);
-  paint(ctx, Q([[-8, 47.5], [-12.5, 45], [13.5, 24.5], [17, 27]]), { fill: ARC.leatherDark, w: LW.detail, depth: 0, speck: 0 });   // 矢筒のベルト
-  if (front) { const rg = UY(1, -1.5, 36.5); paint(ctx, ellipsePts(rg.x, rg.y, 2.3, 2.3, 10), { fill: ARC.brass, w: LW.detail, depth: 0.6, speck: 0, light: 0.4 }); }
-}
-
-/** 短い肩掛けケープ: 裏地が裾から覗く厚み、肩から裾への折り目、真鍮の留め具。sway で裾が揺れる */
-export function drawArcherCape(ctx, rf, P) {
-  const { UY, front } = rf, sw = P.capeSway;
-  const Q = arr => arr.map(([b, z]) => { const k = Math.max(0, (47 - z) / 12); return UY(0, b + sw * k, z - Math.abs(sw) * 0.12 * k); });
-  const hemDown = arr => arr.map(([b, z]) => [b, z - 2]);
-  if (front) {
-    const left = [[2.5, 51], [9, 52.5], [17, 50], [21.5, 42], [19, 36.5], [15.5, 39.5], [12, 35.5], [8, 39.5], [4.5, 37.5], [2.5, 44]];
-    for (const half of [left, left.map(([b, z]) => [-b, z])]) {
-      paint(ctx, Q(hemDown(half.slice(3, 9)).concat(half.slice(3, 9).reverse())), { fill: ARC.capeDark, w: LW.detail, depth: 0, speck: 0 });   // 裏地
-      paint(ctx, Q(half), { fill: ARC.cape, w: LW.outline, depth: 3.2, light: 0.25, speck: 1.2 });
-      const sg = half[1][0] > 0 ? 1 : -1;
-      pLine(ctx, Q([[sg * 14, 49], [sg * 13, 40]]), LW.fine); pLine(ctx, Q([[sg * 7.5, 49.5], [sg * 8, 41]]), LW.fine);   // 折り目
-    }
-    paint(ctx, Q([[6, 53.2], [-6, 53.2], [-5, 50.5], [5, 50.5]]), { fill: ARC.capeDark, w: LW.detail, depth: 0.8, speck: 0 });   // 襟
-    const cl = UY(4, 0, 49.5); paint(ctx, ellipsePts(cl.x, cl.y, 2.6, 2.5, 12), { fill: ARC.brass, w: LW.detail, depth: 0.8, speck: 0, light: 0.45 });
-  } else {
-    const back = [[-17, 50], [-9, 53], [9, 53], [17, 50], [21.5, 42], [18, 35], [13, 38.5], [8, 33], [3, 36.5], [0, 31.5], [-3, 36.5], [-8, 33], [-13, 38.5], [-18, 35], [-21.5, 42]];
-    paint(ctx, Q(hemDown(back.slice(4)).concat(back.slice(4).reverse())), { fill: ARC.capeDark, w: LW.detail, depth: 0, speck: 0 });
-    paint(ctx, Q(back), { fill: ARC.cape, w: LW.outline, depth: 3.4, light: 0.25, speck: 1.2 });
-    for (const b0 of [-10, 0.5, 10]) pLine(ctx, Q([[b0 * 0.8, 51], [b0, 38]]), LW.fine);
-  }
-}
-
 /** 背中の矢筒: 筒 (革の帯2本)・ケープの上から留める革帯・口の縁・矢羽 (生成り / くすんだ赤 / 緑) */
 export function drawQuiver(ctx, rf, P) {
   const { UY } = rf, sw = P.quiverSway;
-  const B = UY(-7, 7, 30 + sw), T = UY(-8.5, -8.5, 61 + sw);
+  const B = UY(-9, 2, 27 + sw), T = UY(QUIVER_TOP[0], QUIVER_TOP[1], QUIVER_TOP[2] + sw);
   const dx = T.x - B.x, dy = T.y - B.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, nx = -uy, ny = ux, hw = 4;
   const at = (p, a, n) => ({ x: p.x + ux * a + nx * n, y: p.y + uy * a + ny * n });
-  const arrows = [[-2.8, 8], [-0.4, 10], [2, 8.5], [3.6, 6.8]], fl = [ARC.fletch, ARC.accent, ARC.fletch2, ARC.fletch];
+  const arrows = [[-3.2, 18], [-.8, 22], [1.8, 20], [3.8, 17]], fl = [ARC.fletch, ARC.accent, ARC.fletch2, ARC.fletch];
   for (const [o, l] of arrows) { const sh = [at(T, -6, o), at(T, l, o * 1.25)]; strokePath(ctx, sh, 2.5 * DRAW.lw, false, PAL.ink); strokePath(ctx, sh, 1.2 * DRAW.lw, false, ARC.wood); }
   paint(ctx, [at(B, 0, hw * 0.85), at(T, 0, hw), at(T, 0, -hw), at(B, 0, -hw * 0.85)], { fill: ARC.leather, w: LW.outline, depth: 2.6, light: 0.25, speck: 1 });
   for (const k of [0.2, 0.8]) { const p = { x: lerp(B.x, T.x, k), y: lerp(B.y, T.y, k) }; paint(ctx, [at(p, -1.3, hw + 0.5), at(p, 1.3, hw + 0.5), at(p, 1.3, -hw - 0.5), at(p, -1.3, -hw - 0.5)], { fill: ARC.leatherDark, w: LW.detail, depth: 0, speck: 0 }); }

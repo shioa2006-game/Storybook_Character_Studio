@@ -1,0 +1,60 @@
+{
+  "mode": "cached",
+  "options": {
+    "mode": "cached",
+    "lineBoil": true,
+    "footFix": true,
+    "xray": false,
+    "characterScale": 1.25,
+    "footOffset": 6
+  },
+  "camera": {
+    "scale": 0.6631666206134291,
+    "tx": 500,
+    "ty": 202.4874274661509,
+    "dpr": 1,
+    "width": 1000,
+    "height": 620
+  },
+  "characterFrameScale": 0.8289582757667864,
+  "lastFrame": {
+    "totalMs": 0.09999999403953552,
+    "characterMs": 0,
+    "order": [
+      "石柱",
+      "宝箱",
+      "selected"
+    ],
+    "occluded": [],
+    "warnings": []
+  },
+  "scene": {
+    "buildMs": 28.5,
+    "bgBytesRGBA": 2480000,
+    "propBytesRGBA": 310256,
+    "props": 2
+  },
+  "caches": {
+    "characters": {
+      "skeleton": {
+        "frames": 64,
+        "bytesRGBA": 3471360,
+        "buildMs": 87.69999998807907,
+        "frameW": 113,
+        "frameH": 120,
+        "k": 0.8289582757667864
+      }
+    },
+    "totalFrames": 64,
+    "totalBytesRGBA": 3474704
+  },
+  "syncPauses": [
+    {
+      "id": "skeleton",
+      "ms": 87.69999998807907,
+      "frames": 64,
+      "at": 42251.59999999404
+    }
+  ],
+  "memoryNote": "bytesRGBA は幅×高さ×4 の理論値。ブラウザの実メモリ (GPU 側の複製などを含む) とは異なる"
+}

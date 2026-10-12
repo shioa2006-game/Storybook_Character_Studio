@@ -118,7 +118,7 @@ const info = renderer.render({
 | `direction` | ✔ (向きのあるキャラ) | `'NW'` (−x) / `'NE'` (−y) / `'SW'` (+y) / `'SE'` (+x) |
 | `action` | | `'idle'` (既定) / `'walk'` / `'attack'`。定義にない動作は idle で描き、`info.warnings` に記録 |
 | `actionTime` | | その動作を始めてからの秒数 (既定 0) |
-| `mirror` | | 左右反転 (向きを持たない骸骨の左右の向きに使う) |
+| `mirror` | | 左右反転。骸骨の方向切替には使用せず `direction` を指定する（装備の持ち手を維持） |
 | `shakeX` | | 描画だけの横揺れ (ワールド px。被弾の演出など) |
 | `xray` | | `false` で透視表示の対象外 (既定 true) |
 | `footprint` | | 前後関係用の床上の範囲 `{x0,x1,y0,y1}` (既定: 位置の ±0.28) |
@@ -181,7 +181,7 @@ const info = renderer.render({
 }
 ```
 
-組み込み: `swordsman` (160コマ)・`archer` (184コマ)・`skeleton` (向きなし・16コマ)。追加の手順は `docs/CHARACTER_GUIDE.md`。
+組み込み: `swordsman` (160コマ)・`archer` (184コマ)・`skeleton` (4方向の待機・歩行・攻撃、合計216コマ)。追加の手順は `docs/CHARACTER_GUIDE.md`。
 
 ## 6. キャラクター登録
 

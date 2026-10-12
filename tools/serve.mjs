@@ -3,16 +3,21 @@
 //   使い方: node tools/serve.mjs [ポート (既定 8080)]   → http://localhost:8080/
 //   外部への通信はしない。127.0.0.1 だけで待ち受ける。
 import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, stat, realpath } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const realRoot = await realpath(ROOT);
+const rootId = createHash('sha256').update(process.platform === 'win32' ? realRoot.toLowerCase() : realRoot).digest('hex');
 const PORT = Number(process.argv[2] || process.env.PORT || 8080);
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8', '.md': 'text/markdown; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.txt': 'text/plain; charset=utf-8' };
 
 const server = createServer(async (req, res) => {
+  // Copied studios can have identical HTML. Identify the actual serving folder.
+  res.setHeader('x-inkstone-root', rootId);
   try {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     let file = path.resolve(ROOT, '.' + p);
@@ -34,4 +39,14 @@ const server = createServer(async (req, res) => {
     res.end(await readFile(file));
   } catch (e) { res.writeHead(500).end(String(e)); }
 });
-server.listen(PORT, '127.0.0.1', () => console.log(`Inkstone: http://localhost:${PORT}/`));
+server.on('error', error => {
+  if (process.send && error.code === 'EADDRINUSE') process.send({ type: 'busy' });
+  else console.error(error.message);
+  process.exitCode = 1;
+  if (process.connected) process.disconnect();
+});
+server.listen(PORT, '127.0.0.1', () => {
+  const port = server.address().port;
+  console.log(`Inkstone: http://localhost:${port}/`);
+  if (process.send) process.send({ type: 'ready', port });
+});

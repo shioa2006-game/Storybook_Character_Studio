@@ -8,12 +8,12 @@ import { inkShape, strokePath } from '../core/ink.js';
 import { DIRS, KX, bodyToWorld, keyframes, nrm3, orth3, smooth, vlerp, walkFeet } from './rig.js';
 
 export const ARC = {
-  skin: PAL.skin, hair: '#865a37', hairLight: '#aa7b4f', hairDark: '#5e3d25',   // [E] 髪を明るく (暗い塊に見えないよう)
-  accent: '#a8574a',   // [E] 矢羽などの小さな差し色 (くすんだ赤)
-  leather: '#9a6a43', leatherDark: '#6e4a2e', linen: '#ebe0c5', linenShade: '#d8caa8',
-  cape: '#808c64', capeDark: '#5f6a49', pants: '#6d5c45', boot: '#7d5538', bootCuff: '#a47a52',
-  wood: '#b0804f', woodDark: '#7a5432', grip: '#4f3a28', string: '#2a2622',
-  fletch: '#efe6cf', fletch2: '#7b8a5c', iron: '#8a8b88', brass: '#c7a24a',
+  skin: '#f4dfb9', hair: '#e8cb89', hairLight: '#fff0bd', hairDark: '#bba06a',
+  accent: '#c9bc96',
+  leather: '#95704c', leatherDark: '#694d35', linen: '#eee5ce', linenShade: '#d8caa8',
+  cape: '#858d63', capeDark: '#566043', pants: '#65634e', boot: '#805e40', bootCuff: '#9b7852',
+  wood: '#a78255', woodDark: '#705234', grip: '#795939', string: '#302d25',
+  fletch: '#eee3c8', fletch2: '#d4c59d', iron: '#92948a', brass: '#b99c61',
 };
 
 export const ARCHER_ATTACK_T = 1.7;                 // 射撃1回の長さ (秒)
@@ -24,15 +24,18 @@ export const ARCHER_RELEASE_U = 0.75;               // 射撃の中で矢を放�
 
 export const ARROW_LEN = 36;                        // 矢の長さ (ローカルpx) [E] 34 → 36
 
-export const IDLE_GRIP = [5, 19, 31], IDLE_UP = [0.30, 0.08, 0.95], IDLE_RH = [6, -11, 37];
+export const IDLE_GRIP = [9, 30, 38], IDLE_UP = [0.10, 0.45, 0.89], IDLE_RH = [5, -18, 29];
+export const QUIVER_TOP = [-10, -23, 61];
 
 export const AIM_GRIP = [26, -1, 45], AIM_UP = [0.04, 0.10, 0.99];   // [E修正6] D [21,2,48] → E初版 [22,-1,47] → 握りを前へ (26。腕が約1割伸びる誇張)・矢の線を胸の高さへ (45)。弓と引き手が顔に重ならない
 
 export const AIM_YAW = 0.32;   // 構えで左肩を的へ向けるひねり ([修正6] 0.42 では ↗ で胴が真横になり細く見えた)
+const quiverReach = [QUIVER_TOP[0]*Math.cos(AIM_YAW)+QUIVER_TOP[1]*Math.sin(AIM_YAW),
+  -QUIVER_TOP[0]*Math.sin(AIM_YAW)+QUIVER_TOP[1]*Math.cos(AIM_YAW),QUIVER_TOP[2]];
 
 // 右手の軌道: 構え → 矢筒へ → 矢を抜く → つがえる → 引き分け → 会(保持) → 離れ → 戻り
 export const RHAND_KEYS = [
-  [0.00, IDLE_RH], [0.18, [4, -12, 42]], [0.28, [-7, -9, 60]], [0.36, [-2, -6, 57]],
+  [0.00, IDLE_RH], [0.18, [4, -12, 42]], [0.28, quiverReach], [0.36, [-2, -6, 57]],
   [0.45, [20, -1, 45]], [0.62, [2, -1, 45]], [0.75, [1.5, -1, 45]], [0.80, [-7, -10, 52]],   // [E修正6] 引き手は顎の下 (z45) に付け、離れで後ろへ抜ける
   [0.90, [2, -9, 42]], [1.00, IDLE_RH],
 ];
@@ -48,17 +51,17 @@ export function archerPose(action, t) {
   if (action === 'idle') {
     const br = Math.sin(t * 2.2);
     P.body = [0, 0, br * 0.8];
-    P.grip = [5, 19, 31 + br * 0.3];
-    P.bowUp = nrm3([0.30 + Math.sin(t * 1.1) * 0.03, 0.08, 0.95]);
-    P.rHand = [6, -11, 37 + br * 0.4];            // 右手は矢筒のベルトに添える
+    P.grip = [IDLE_GRIP[0], IDLE_GRIP[1], IDLE_GRIP[2] + br * 0.3];
+    P.bowUp = nrm3([IDLE_UP[0] + Math.sin(t * 1.1) * 0.03, IDLE_UP[1], IDLE_UP[2]]);
+    P.rHand = [IDLE_RH[0], IDLE_RH[1], IDLE_RH[2] + br * 0.4];
     P.look = Math.sin(t * 0.9) * 1.6;             // 周囲を見回す (視線が左右に動く)
     P.capeSway = Math.sin(t * 1.6) * 1.2;
     P.quiverSway = Math.sin(t * 2.2 + 0.6) * 0.4;
   } else if (action === 'walk') {
     const wf = walkFeet(t), s = wf.s;               // 共通リグの足運び (接地補正込み)
     P.footL = wf.footL; P.footR = wf.footR; P.body = [2, 0, wf.bob];
-    P.grip = [5 - 4 * s, 19, 31 + Math.abs(s) * 0.8];   // 弓の腕は左脚と逆に振る
-    P.bowUp = nrm3([0.30 - 0.12 * s, 0.08, 0.95]);
+    P.grip = [IDLE_GRIP[0] - 4 * s, IDLE_GRIP[1], IDLE_GRIP[2] + Math.abs(s) * 0.8];
+    P.bowUp = nrm3([IDLE_UP[0] - 0.12 * s, IDLE_UP[1], IDLE_UP[2]]);
     P.rHand = [4 + 4 * s, -15, 32];
     P.capeSway = -s * 2.2;                         // ケープは体の揺れに遅れて振れる
     P.quiverSway = Math.cos(2 * wf.ph) * 0.9;
@@ -81,9 +84,9 @@ export function archerPose(action, t) {
       const k = smooth((u - 0.28) / 0.17);
       P.arrow = { mode: 'hand', dir: nrm3(vlerp([-0.35, -0.25, 0.9], [1, 0, 0], k)) };
     } else if (u >= 0.45 && u < ARCHER_RELEASE_U) P.arrow = { mode: 'nock' };
-    // 右肘: 引き分けでは後ろ・外・上へ張る
+    // 右肘: 後ろへ引き、ちび頭の顎・フードに当たらない高さに収める。
     const kd = u < 0.4 ? smooth(u / 0.4) * 0.5 : u < 0.82 ? 1 : 1 - smooth((u - 0.82) / 0.18);
-    P.elbowR = nrm3(vlerp([0.1, -0.35, -1], [-0.8, -0.6, 0.25], kd));   // [E修正6] 肘を後ろ・外へ (上げすぎると頭の奥行きの中に入り、前腕が口の前を横切った)
+    P.elbowR = nrm3(vlerp([0.1, -0.35, -1], [-0.8, -0.6, -0.1], kd));
     P.elbowL = nrm3(vlerp([0.1, 0.55, -0.85], [0, 0.6, -0.8], kd));
     // 体: 引き分けでわずかに反り、離れで小さく揺れる。足は左を前に開く (射の構え)
     P.body = keyframes([[0, [0, 0, 0]], [0.62, [-1.2, 0, 0.4]], [0.75, [-1.2, 0, 0.4]], [0.8, [0.6, 0, 0]], [1, [0, 0, 0]]], u);

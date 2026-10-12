@@ -46,8 +46,9 @@ test('switching during movement or attack clears the state and stays on a walkab
   assert.equal(game.unit.character, 'swordsman');
 });
 
-test('idle-only skeleton moves without inventing walk or attack, including queued input', () => {
-  const game = createGame({ character: catalog.find(c => c.id === 'skeleton').definition });
+test('idle-only definition moves without inventing walk or attack, including queued input', () => {
+  const skeleton = catalog.find(c => c.id === 'skeleton').definition;
+  const game = createGame({ character: {...skeleton, actions:{idle:skeleton.actions.idle}} });
   assert.ok(game.moveTo(7, 5)); advance(game, .2);
   const route = game.path;
   assert.equal(game.unit.action, 'idle'); assert.equal(game.attack(), false);

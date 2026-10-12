@@ -8,43 +8,59 @@ import { lerp } from '../core/geometry.js';
 import { PAL } from '../core/palette.js';
 import { strokePath } from '../core/ink.js';
 import { LW, paint, taperPts } from '../core/paint.js';
-import { DIRS, KX, KY_G, LAYER, WALK_HZ, bodyLayerKey, bodyToWorld, cLine, groundDirScreen, ik2, nrm3, renderRig, rigFrame, vlerp, yawToBody } from './rig.js';
+import { DIRS, KX, KY_G, LAYER, WALK_HZ, bodyLayerKey, bodyToWorld, groundDirScreen, ik2, nrm3, renderRig, rigFrame, vlerp, yawToBody } from './rig.js';
 import { legParts2, mittenHand } from './painting.js';
-import { AIM_YAW, ARC, ARCHER_ATTACK_T, ARCHER_IDLE_PERIOD, ARCHER_RELEASE_U, ARROW_LEN, archerPose, bowCantSign, bowGeometry, drawArrowShape } from './archer-pose.js';
-import { ARCHER_LEGS, bandAcross, drawArcherCape, drawArcherHead, drawArcherTorso, drawBow, drawQuiver, polyStroke } from './archer-parts.js';
+import { AIM_YAW, ARC, QUIVER_TOP, ARCHER_ATTACK_T, ARCHER_IDLE_PERIOD, ARCHER_RELEASE_U, ARROW_LEN, archerPose, bowCantSign, bowGeometry, drawArrowShape } from './archer-pose.js';
+import { ARCHER_LEGS, bandAcross, drawArcherCape, drawArcherMantle, drawArcherHead, drawArcherTorso, drawBow, drawQuiver, polyStroke } from './archer-parts.js';
 
 /**
- * 弓使いを描く (実験Eの造形)。(x,y)=足元の画面座標。姿勢・描画順の決め方は実験Dと同じ。
+ * 金髪エルフの弓使い。(x,y)=足元の画面座標。既存の射撃リグを使用。
  * @returns 手・弦・矢の画面座標 (確認表示用)
  */
 export function drawArcherRig(ctx, x, y, dirKey, action, t, scale = 1, opts = {}) {
   const P = archerPose(action, t);
-  const boil = DRAW.boil ? Math.floor(t * 5) % 3 : 0;
+  const boil = 0; // Stable cloth and hair texture across animation frames.
   const rf = rigFrame(dirKey, P.body, P.yaw), { dir, U, sx, front } = rf;
   const UG = (a, b, z) => { const w = bodyToWorld(dir, a + P.body[0], b + P.body[1]); return { x: (w.X - w.Y) * KX, y: (w.X + w.Y) * KY_G() - (z + P.body[2]), d: w.X + w.Y }; };
   const key = (p, eps = 0) => bodyLayerKey(rf, p[0], p[1], p[2]) + eps;
   // [方向ごとの補正] 弓の上端を頭から離す傾き。[E] 弓が大きくなったので傾きを増やす (D: 0.1 + 0.24·k)
   P.bowUp = nrm3([P.bowUp[0], P.bowUp[1] + bowCantSign(dirKey) * (0.12 + 0.62 * (P.yaw / AIM_YAW)), P.bowUp[2]]);
   const geo = bowGeometry(P), parts = [];
+  const joints = Object.fromEntries(['L', 'R'].map(side => {
+    const sa = yawToBody(rf, 0, side === 'L' ? 14 : -14), S = [sa[0], sa[1], 47];
+    const H = side === 'L' ? P.grip : P.rHand;
+    return [side, { S, H, E: ik2(S, H, 11.5, 11.5, side === 'L' ? P.elbowL : P.elbowR) }];
+  }));
+  // In SW the left bow arm is nearest. Keep the nocked arrow and drawing
+  // arm behind that whole assembly, including while the hands meet to nock.
+  const nearBowArm = dirKey === 'SW' && geo.nocked;
+  const nockedDepth = Math.min(key(joints.L.E), key(geo.G, -0.02)) - 0.04;
+  const armDepth = (side, depth) => nearBowArm && side === 'R' ? Math.min(depth, nockedDepth - 0.02) : depth;
+  // The drawing hand may sit at the chin, but its sleeve is behind the head.
+  // Do not promote a whole white forearm with the hand's a+10 depth bias.
+  const sleeveDepth = (side, depth) => {
+    if (side !== 'R') return armDepth(side, depth);
+    // The rear cloak covers the drawing sleeve wherever their silhouettes
+    // overlap. An elbow-centre threshold misses the sleeve's width during
+    // interpolation and makes it pop through the cloak (e.g. u=0.566).
+    // Keep this order throughout the motion; the separate hand still reaches
+    // the quiver/string, and sleeve portions outside the cloak remain visible.
+    const cover = front ? LAYER.head - 0.6 : LAYER.cape - 0.6;
+    return Math.min(armDepth(side, depth), cover);
+  };
   parts.push(...legParts2(ctx, rf, P, ARCHER_LEGS));
   parts.push({ id: 'torso', d: LAYER.torso, draw: () => drawArcherTorso(ctx, rf, P) });
-  parts.push({ id: 'cape', d: LAYER.cape, draw: () => drawArcherCape(ctx, rf, P) });
+  parts.push({ id: 'cape', d: front ? -200 : LAYER.cape, draw: () => drawArcherCape(ctx, rf, P) });
+  parts.push({ id: 'mantle', d: LAYER.cape + 1, draw: () => drawArcherMantle(ctx, rf) });
   const hc = U(1.5, 0, 67);
   parts.push({ id: 'head', d: LAYER.head, draw: () => drawArcherHead(ctx, hc, sx, front, P) });
-  const qa = yawToBody(rf, -8.5, -8.5);
-  parts.push({ id: 'quiver', d: key([qa[0], qa[1], 61]), draw: () => drawQuiver(ctx, rf, P) });
-  const fb = [-2, -16, 71], ft = [-9, -19.5, 90];                                 // 羽根飾り (右耳の後ろ)
-  parts.push({ id: 'feather', d: key(fb), draw: () => {
-    const a = U(...fb), b = U(...ft), dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
-    paint(ctx, [a, { x: a.x + dx * 0.45 + nx * 3.4, y: a.y + dy * 0.45 + ny * 3.4 }, b, { x: a.x + dx * 0.5 - nx * 2.6, y: a.y + dy * 0.5 - ny * 2.6 }], { fill: ARC.fletch2, w: LW.detail, depth: 1, speck: 0, amp: 0.2, step: 4 });
-    cLine(ctx, [[a.x, a.y], [b.x, b.y]], LW.fine);
-  } });
+  const qa = yawToBody(rf, QUIVER_TOP[0], QUIVER_TOP[1]);
+  parts.push({ id: 'quiver', d: Math.min(key([qa[0], qa[1], QUIVER_TOP[2]]), LAYER.head - 1), draw: () => drawQuiver(ctx, rf, P) });
   // 腕: 肩 → 肘 (IK) → 手。[E] 上腕・前腕を太さのある先細りの形にし、手をミトン形に
   const arm = (side) => {
-    const sb = side === 'L' ? 14 : -14, sa = yawToBody(rf, 0, sb), S = [sa[0], sa[1], 47];
-    const H = side === 'L' ? P.grip : P.rHand, E = ik2(S, H, 11.5, 11.5, side === 'L' ? P.elbowL : P.elbowR);
+    const { S, H, E } = joints[side];
     const S2 = vlerp(S, E, 0.3);
-    parts.push({ id: 'upper' + side, d: key(E), draw: () => paint(ctx, taperPts(U(...S2), U(...E), 4.8, 4.1), { fill: ARC.linen, w: LW.part, depth: 1.8, speck: 0.9 }) });
+    parts.push({ id: 'upper' + side, d: sleeveDepth(side, key(E)), draw: () => paint(ctx, taperPts(U(...S2), U(...E), 4.8, 4.1), { fill: ARC.linen, w: LW.part, depth: 1.8, speck: 0.9 }) });
     const Hk = side === 'R' && H[0] > -2 ? [H[0] + 10, H[1], H[2]] : H;           // [D修正3・5] 胸の前の右手は「胸と顎より前」
     // [E修正7] 前腕の分割: 肘と手が別の層 (胴の奥 / 胴と頭の間 / 頭の手前) にあるときは、肘側の半分を肘の順位で、手側の半分を手の順位で描く。
     //   1つの部品のままだと、↙↘ の引き切りで「体の後ろの肘 → 胸の前の手」の前腕全体が顎の前に描かれ、白い棒が口元に立って見えた。
@@ -64,17 +80,22 @@ export function drawArcherRig(ctx, x, y, dirKey, action, t, scale = 1, opts = {}
         paint(ctx, taperPts(seg[0], seg[1], rr[0], rr[1]), { fill: ARC.linen, w: LW.part, depth: 1.6, speck: 0.9 });
         if (half === 'e') return;
         bandAcross(ctx, wr, ux, uy, 3.9, 1.5, ARC.leather);
-        mittenHand(ctx, h, ux, uy, 3.9, ARC.leatherDark, { knuckles: false, thumbSide: sx });
       }
     };
     if (split) {
-      parts.push({ id: 'foreE' + side, d: key(E, 0.01), draw: () => fore('e') });
-      parts.push({ id: 'fore' + side, d: key(Hk), draw: () => fore('h') });
-    } else parts.push({ id: 'fore' + side, d: key(Hk), draw: () => fore('all') });
+      parts.push({ id: 'foreE' + side, d: sleeveDepth(side, key(E, 0.01)), draw: () => fore('e') });
+      parts.push({ id: 'fore' + side, d: sleeveDepth(side, key(Hk)), draw: () => fore('h') });
+    } else parts.push({ id: 'fore' + side, d: sleeveDepth(side, key(Hk)), draw: () => fore('all') });
     return { S, E, H };
   };
   const armL = arm('L'), armR = arm('R');
-  // 弓・弦・矢 (弓は左手の直前、矢は左手の直後: 握った指の上に矢が乗る)
+  const drawingHandKey = armR.H[0] > -2 ? [armR.H[0] + 10, armR.H[1], armR.H[2]] : armR.H;
+  parts.push({ id: 'drawingHand', d: nearBowArm ? nockedDepth + 0.01 : key(drawingHandKey), draw: () => {
+    // Fingers cover the nock/string contact, but stay behind the near left arm.
+    const e = U(...armR.E), h = UG(...armR.H);
+    mittenHand(ctx, h, h.x - e.x, h.y - e.y, 3.9, ARC.leatherDark, { knuckles: false, thumbSide: sx });
+  } });
+  // Bow under its gripping fingers; SW nocked arrow behind the left bow arm.
   parts.push({ id: 'bow', d: key(geo.G, -0.02), draw: () => drawBow(ctx, UG, geo) });
   const sm = vlerp(geo.G, geo.stringMid, 0.5);
   // [E修正8] 弦の上半分は頭より手前に来ても「頭の直前」に描く (↙↘ の引き切りで弦が顔の真ん中を斜めに横切っていた)。
@@ -103,7 +124,7 @@ export function drawArcherRig(ctx, x, y, dirKey, action, t, scale = 1, opts = {}
     }
     arrowInfo = { nock, d, len };
     const ha = P.rHand[0] > -2 ? [P.rHand[0] + 10, P.rHand[1], P.rHand[2]] : P.rHand;
-    parts.push({ id: 'arrow', d: (P.arrow.mode === 'nock' ? key(geo.G) : key(ha)) + 0.02, draw: () => drawArrowShape(ctx, nock, d, len, DRAW.lw) });
+    parts.push({ id: 'arrow', d: nearBowArm ? nockedDepth : (P.arrow.mode === 'nock' ? key(geo.G) : key(ha)) + 0.02, draw: () => drawArrowShape(ctx, nock, d, len, DRAW.lw) });
   }
   renderRig(ctx, x, y, scale, parts, { prefix: 'archer', boil, shadow: opts.shadow, shadowSeed: 'hero-shadow' });
   const S = p => ({ x: x + p.x * scale, y: y + p.y * scale });
@@ -139,7 +160,7 @@ export const archer = Object.freeze({
     walk: { period: 1 / WALK_HZ, frames: 10 },
     attack: { period: ARCHER_ATTACK_T, keys: ARCHER_ATTACK_KEYS, once: true, releaseAt: ARCHER_RELEASE_U },
   },
-  frameBox: { x0: -74, x1: 74, y0: -124, y1: 20 },
+  frameBox: { x0: -82, x1: 82, y0: -126, y1: 24 },
   equipment: { leftHand: 'bow', rightHand: 'string', back: 'quiver' },
   projectile: { type: 'arrow', releaseAt: ARCHER_RELEASE_U, origin: archerReleaseInfo, draw: drawArrowShape, length: ARROW_LEN },
 });

@@ -7,7 +7,7 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-node tools\start-studio.mjs --open
+node "%~dp0tools\start-studio.mjs" --open
 if errorlevel 1 (
   echo Failed to start character-studio. See the error above.
   pause
